@@ -14,10 +14,8 @@ const App = () => {
   const [speed, setSpeed] = useState(50);
   const [isSorting, setIsSorting] = useState(false);
 
-  // ✅ Store all timeout IDs
   const timeoutsRef = useRef([]);
 
-  // ✅ Generate a new random array
   const generateNewArray = () => {
     const newArray = Array.from(
       { length: arraySize },
@@ -26,17 +24,14 @@ const App = () => {
     setArray(newArray);
   };
 
-  // ✅ Regenerate array when size changes
   useEffect(() => {
     generateNewArray();
   }, [arraySize]);
 
-  // ✅ Sorting handler
   const handleStartSorting = async () => {
     if (isSorting) return;
     setIsSorting(true);
 
-    // Clear any previous timeouts
     timeoutsRef.current.forEach((id) => clearTimeout(id));
     timeoutsRef.current = [];
 
@@ -62,7 +57,6 @@ const App = () => {
         break;
     }
 
-    // Apply animations visually
     for (let i = 0; i < animations.length; i++) {
       const newArray = animations[i];
       const timeoutId = setTimeout(() => {
@@ -71,15 +65,12 @@ const App = () => {
       timeoutsRef.current.push(timeoutId);
     }
 
-    // Stop sorting after completion
     const finalTimeout = setTimeout(() => setIsSorting(false), animations.length * (200 - speed));
     timeoutsRef.current.push(finalTimeout);
   };
 
-  // ✅ Stop sorting handler
   const handleStopSorting = () => {
     setIsSorting(false);
-    // Clear all active timeouts
     timeoutsRef.current.forEach((id) => clearTimeout(id));
     timeoutsRef.current = [];
   };
